@@ -45,7 +45,7 @@ encode_trump_test_face = face_recognition.face_encodings(testing_image_trump)[0]
 cv2.rectangle(testing_image_trump, (trump_test_face_location[3], trump_test_face_location[0]),
               (trump_test_face_location[1], trump_test_face_location[2]), (255, 0, 255), 2)
 
-print(f"Testing Trump Face Location: ", trump_test_face_location)
+print(f"Testing Trump Face Location: {trump_test_face_location}")
 
 '''
 Compare the two faces

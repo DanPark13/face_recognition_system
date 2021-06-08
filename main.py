@@ -11,11 +11,11 @@ import face_recognition
 Load images for testing
 '''
 # Load training image
-training_image_trump = face_recognition.load_image_file("training_images/donald_trump_official.jpg.jpg")
+training_image_trump = face_recognition.load_image_file("training_images/donald_trump_official.jpg")
 # Convert training image to RGB (red-green-blue)
 training_image_trump = cv2.cvtColor(training_image_trump, cv2.COLOR_BGR2RGB)
 # Load testing image
-testing_image_trump = face_recognition.load_image_file("testing_images/donald_trump_test.jpg.jpg")
+testing_image_trump = face_recognition.load_image_file("testing_images/donald_trump_test.jpg")
 # Convert testing image to RGB (red-green-blue)
 testing_image_trump = cv2.cvtColor(testing_image_trump, cv2.COLOR_BGR2RGB)
 
@@ -44,6 +44,13 @@ cv2.rectangle(testing_image_trump, (trump_test_face_location[3], trump_test_face
               (trump_test_face_location[1], trump_test_face_location[2]), (255, 0, 255), 2)
 
 print(f"Testing Trump Face Location: ", trump_test_face_location)
+
+'''
+Compare the two faces
+'''
+comparison_results = face_recognition.compare_faces([encode_trump_train_face], encode_trump_test_face)
+face_distance = face_recognition.face_distance([encode_trump_train_face],encode_trump_test_face) # Lower number = better
+print(comparison_results, face_distance)
 
 '''
 Show Testing Images

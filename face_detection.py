@@ -1,6 +1,8 @@
-'''
-Prototype Facial Recognition Testing
-'''
+"""
+Facial Detection
+
+Detects the faces on a picture
+"""
 
 # Import Libraries
 import cv2

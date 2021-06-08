@@ -39,5 +39,28 @@ def find_encodings(images):
         encoded_image_list.append(encoded_image)
     return encoded_image_list
 
-encoded_images = find_encodings(all_images)
+
+encoded_images_list = find_encodings(all_images)
 print("Encoding Complete")
+
+"""
+Webcam Functionality
+"""
+# Get reference to default webcam
+video_capture = cv2.VideoCapture(0, cv2.CAP_DSHOW)
+print("Starting Webcam...")
+
+while True:
+    # Grab frame of video
+    ret, frame = video_capture.read()
+
+    # Show the webcam frame onto the screen
+    cv2.imshow("Webcam", frame)
+
+    # Hit "q" on the keyboard to quit
+    if cv2.waitKey(1) & 0xFF == ord('q'):
+        break
+
+# Release handle to the webcam
+video_capture.release()
+cv2.destroyAllWindows()

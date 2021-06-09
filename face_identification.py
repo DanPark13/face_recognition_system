@@ -1,7 +1,7 @@
 """
 Face Identification
 
-Detects the faces of a webcame and identifies it with a picture
+Detects the faces of a webcam and identifies it with a picture
 """
 
 # Import Libraries
@@ -17,6 +17,7 @@ image_folder_path = "training_images"
 all_images = []
 all_names = []
 image_files = os.listdir(image_folder_path)
+font = cv2.FONT_HERSHEY_DUPLEX
 
 """
 Get rid of '.jpg' extension name
@@ -68,11 +69,23 @@ while True:
         best_matches = face_recognition.compare_faces(encoded_images_list, encoded_face)
         face_accuracy = face_recognition.face_distance(encoded_images_list, encoded_face)
         print(face_accuracy)
+
+        # Put the face locations onto x and y coordinates
+        top, right, bottom, left = face_location
+        top, right, bottom, left = top * 4, right * 4, bottom * 4, left * 4
+        # Draw a box around the face
+        cv2.rectangle(frame, (left, top), (right, bottom), (255, 255, 0), 2)
+        # Draw a label with a name below the face
+        cv2.rectangle(frame, (left, bottom - 35), (right, bottom), (255, 255, 0), 2)
+
         face_match_index = np.argmin(face_accuracy)
 
         if best_matches[face_match_index]:
             name = all_names[face_match_index].upper()
             print(name)
+            cv2.putText(frame, name, (left + 6, bottom - 6), font, 1, (255, 255, 0), 2)
+        else:
+            cv2.putText(frame, "UNKNOWN", (left + 6, bottom - 6), font, 1, (255, 255, 0), 2)
 
     # Show the webcam frame onto the screen
     cv2.imshow("Webcam", frame)

@@ -9,6 +9,7 @@ import cv2
 import numpy as np
 import face_recognition
 import os
+from datetime import datetime
 
 """
 Import images
@@ -39,6 +40,22 @@ def find_encodings(images):
         encoded_image = face_recognition.face_encodings(image)[0]
         encoded_image_list.append(encoded_image)
     return encoded_image_list
+
+
+def mark_attendance(person_name):
+    # Read and Open the Attendance Sheet
+    with open("attendance_sheet.csv","r+") as sheet:
+        current_data_list = sheet.readlines()
+        name_list = []
+        # Create a new entry
+        for line in current_data_list:
+            entry = line.split(",")
+            name_list.append(entry[0])
+        # If person detected is not in the attendance sheet, mark them in attendance sheet
+        if person_name not in name_list:
+            time_now = datetime.now()
+            date_time = time_now.strftime("%H:%M:%S")
+            sheet.writelines(f"\n{person_name},{date_time}")
 
 
 encoded_images_list = find_encodings(all_images)
@@ -74,18 +91,24 @@ while True:
         top, right, bottom, left = face_location
         top, right, bottom, left = top * 4, right * 4, bottom * 4, left * 4
         # Draw a box around the face
-        cv2.rectangle(frame, (left, top), (right, bottom), (255, 255, 0), 2)
+        cv2.rectangle(frame, (left, top), (right, bottom), (0, 255, 0), 2)
         # Draw a label with a name below the face
-        cv2.rectangle(frame, (left, bottom - 35), (right, bottom), (255, 255, 0), 2)
-
+        cv2.rectangle(frame, (left, bottom - 35), (right, bottom), (0, 255, 0), 2)
+        # Get the index of the matching photo
         face_match_index = np.argmin(face_accuracy)
 
+        # If the webcam frame has a person found in the database
         if best_matches[face_match_index]:
+            # Store the name into "name" variable
             name = all_names[face_match_index].upper()
             print(name)
-            cv2.putText(frame, name, (left + 6, bottom - 6), font, 1, (255, 255, 0), 2)
+            # Put the name of the person on the box line
+            cv2.putText(frame, name, (left + 6, bottom - 6), font, 1, (0, 255, 0), 2)
+            # Mark that person in the attendance sheet
+            mark_attendance(name)
         else:
-            cv2.putText(frame, "UNKNOWN", (left + 6, bottom - 6), font, 1, (255, 255, 0), 2)
+            # Show person is unknown if unknown face comes up
+            cv2.putText(frame, "UNKNOWN", (left + 6, bottom - 6), font, 1, (0, 255, 0), 2)
 
     # Show the webcam frame onto the screen
     cv2.imshow("Webcam", frame)

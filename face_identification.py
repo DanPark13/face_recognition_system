@@ -53,6 +53,26 @@ print("Starting Webcam...")
 while True:
     # Grab frame of video
     ret, frame = video_capture.read()
+    # Resize frame of video to 1/4 size for faster face recognition processing
+    small_frame = cv2.resize(frame, (0, 0), fx=0.25, fy=0.25)
+    # Convert the image from BGR color (which OpenCV uses) to RGB color (which face_recognition uses)
+    small_frame = small_frame[:, :, ::-1]
+
+    # Get the face location within the frame of the webcam
+    face_frame = face_recognition.face_locations(small_frame)
+    # Get the encoders of the face within the frame of the webcam
+    encoder_frame = face_recognition.face_encodings(small_frame, face_frame)
+
+    # Grab the encoded face and face location from the frame
+    for encoded_face, face_location in zip(encoder_frame, face_frame):
+        best_matches = face_recognition.compare_faces(encoded_images_list, encoded_face)
+        face_accuracy = face_recognition.face_distance(encoded_images_list, encoded_face)
+        print(face_accuracy)
+        face_match_index = np.argmin(face_accuracy)
+
+        if best_matches[face_match_index]:
+            name = all_names[face_match_index].upper()
+            print(name)
 
     # Show the webcam frame onto the screen
     cv2.imshow("Webcam", frame)

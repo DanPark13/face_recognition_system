@@ -6,7 +6,6 @@ Detects the faces on a picture
 
 # Import Libraries
 import cv2
-import numpy as np
 import face_recognition
 
 '''

@@ -12,7 +12,7 @@ import face_recognition
 Load images for testing
 '''
 # Load training image
-training_image_trump = face_recognition.load_image_file("training_images/donald_trump_official.jpg")
+training_image_trump = face_recognition.load_image_file("training_images/DonaldTrump_DT5893.jpg")
 # Convert training image to RGB (red-green-blue)
 training_image_trump = cv2.cvtColor(training_image_trump, cv2.COLOR_BGR2RGB)
 # Load testing image

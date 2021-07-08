@@ -90,8 +90,9 @@ def mark_attendance(person_name):
         # If person detected is not in the attendance sheet, mark them in attendance sheet
         if person_name not in name_list:
             time_now = datetime.now()
-            date_time = time_now.strftime("%H:%M:%S")
-            sheet.writelines(f"\n{person_name},{date_time}")
+            date = time_now.strftime("%x")
+            time = time_now.strftime("%H:%M:%S")
+            sheet.writelines(f"\n{person_name},{date},{time}")
 
 
 encoded_images_list = find_encodings(all_images)
